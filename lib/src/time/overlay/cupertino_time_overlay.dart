@@ -19,6 +19,7 @@ class CupertinoTimeOverlay extends StatefulWidget {
     super.key,
     this.containerDecoration,
     this.onTimeChanged,
+    this.bottomWidget,
   })  : initialTime = initialTime ?? TimeOfDay.now(),
         minimumTime = minimumTime ?? const TimeOfDay(hour: 0, minute: -1),
         maximumTime = maximumTime ?? const TimeOfDay(hour: 23, minute: 60) {
@@ -47,6 +48,7 @@ class CupertinoTimeOverlay extends StatefulWidget {
   final ValueChanged<TimeOfDay>? onTimeChanged;
   final int minuteInterval;
   final bool use24hFormat;
+  final Widget? bottomWidget;
 
   @override
   State<CupertinoTimeOverlay> createState() => _CupertinoTimeOverlayState();
@@ -85,13 +87,18 @@ class _CupertinoTimeOverlayState extends State<CupertinoTimeOverlay> {
       verticalSpacing: widget.verticalSpacing,
       offset: widget.offset,
       outsideTapDismissable: true,
-      child: CupertinoTimePicker(
-        initialTime: widget.initialTime,
-        minimumTime: widget.minimumTime,
-        maximumTime: widget.maximumTime,
-        onTimeChanged: _onDateTimeChanged,
-        minuteInterval: widget.minuteInterval,
-        use24hFormat: widget.use24hFormat,
+      child: Column(
+        children: <Widget>[
+          CupertinoTimePicker(
+            initialTime: widget.initialTime,
+            minimumTime: widget.minimumTime,
+            maximumTime: widget.maximumTime,
+            onTimeChanged: _onDateTimeChanged,
+            minuteInterval: widget.minuteInterval,
+            use24hFormat: widget.use24hFormat,
+          ),
+          widget.bottomWidget ?? const SizedBox.shrink(),
+        ],
       ),
     );
   }
